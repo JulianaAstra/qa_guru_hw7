@@ -13,7 +13,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ZipParsingTests {
     private ClassLoader cl = ZipParsingTests.class.getClassLoader();
@@ -27,12 +26,11 @@ public class ZipParsingTests {
     final String[] FIRST_ROW = new String[] {"email", "name"};
     final String[] SECOND_ROW = new String[] {"testemail@gmail.com", "kate"};
 
-
     @Test
     @DisplayName("Zip Архив содержит файл pdf")
     void zipWithPdfParsingTest() throws Exception {
         InputStream pdfResource = cl.getResourceAsStream(PDF_ZIP_FILE);
-        assertNotNull(pdfResource, "Could not find resource: " + PDF_ZIP_FILE);
+
         try (ZipInputStream zis = new ZipInputStream(pdfResource)) {
             ZipEntry entry;
             boolean archiveHasFiles = false;
@@ -54,7 +52,7 @@ public class ZipParsingTests {
     @DisplayName("Zip Архив содержит файл xlsx")
     void zipWithXlsxParsingTest() throws Exception {
         InputStream xlsxResource = cl.getResourceAsStream(XLSX_ZIP_FILE);
-        assertNotNull(xlsxResource, "Could not find resource: " + XLSX_ZIP_FILE);
+
         try (ZipInputStream zis = new ZipInputStream(xlsxResource)) {
             ZipEntry entry;
             boolean archiveHasFiles = false;
@@ -76,7 +74,7 @@ public class ZipParsingTests {
     @DisplayName("Zip Архив содержит файл csv")
     void zipWithCsvxParsingTest() throws Exception {
         InputStream csvResource = cl.getResourceAsStream(CSV_ZIP_FILE);
-        assertNotNull(csvResource, "Could not find resource: " + CSV_ZIP_FILE);
+
         try (ZipInputStream zis = new ZipInputStream(csvResource)) {
             ZipEntry entry;
             boolean archiveHasFiles = false;
