@@ -1,17 +1,22 @@
 import com.codeborne.pdftest.PDF;
 import com.codeborne.xlstest.XLS;
+import com.opencsv.CSVReader;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ZipParsingTests {
-    private ClassLoader cs = ZipParsingTests.class.getClassLoader();
+    private ClassLoader cl = ZipParsingTests.class.getClassLoader();
 
     @Test
     @DisplayName("Zip Архив содержит файл pdf")
@@ -20,7 +25,7 @@ public class ZipParsingTests {
         final String PDF_FILE_NAME = "file_pdf.pdf";
 
         try (ZipInputStream zis = new ZipInputStream(
-            cs.getResourceAsStream(PDF_ZIP_FILE)
+            cl.getResourceAsStream(PDF_ZIP_FILE)
         )) {
             ZipEntry entry;
             boolean archiveHasFiles = false;
@@ -50,7 +55,7 @@ public class ZipParsingTests {
         final String XLSX_FILE_NAME = "file_xlsx.xlsx";
 
         try (ZipInputStream zis = new ZipInputStream(
-                cs.getResourceAsStream(XLSX_ZIP_FILE)
+                cl.getResourceAsStream(XLSX_ZIP_FILE)
         )) {
             ZipEntry entry;
             boolean archiveHasFiles = false;
@@ -67,6 +72,48 @@ public class ZipParsingTests {
                     assertThat(xls.excel.getNumberOfSheets()).isGreaterThan(0);
                     assertThat(xls.excel.getSheetAt(0).getLastRowNum()).isGreaterThanOrEqualTo(1);
                     assertEquals("test_mail@ya.ru", xls.excel.getSheetAt(0).getRow(1).getCell(0).getStringCellValue());
+                }
+            }
+            Assertions.assertTrue(archiveHasFiles, "Archive is empty!");
+        }
+    }
+
+    @Test
+    @DisplayName("Zip Архив содержит файл csv")
+    void zipWithCsvxParsingTest() throws Exception {
+        final String CSV_ZIP_FILE = "file_csv.zip";
+        final String CSV_FILE_NAME = "file_csv.csv";
+
+        try (ZipInputStream zis = new ZipInputStream(
+                cl.getResourceAsStream(CSV_ZIP_FILE)
+        )) {
+            ZipEntry entry;
+            boolean archiveHasFiles = false;
+
+            while ((entry = zis.getNextEntry()) != null) {
+                archiveHasFiles = true;
+                byte[] csvContent = zis.readAllBytes();
+                assertEquals(CSV_FILE_NAME, entry.getName());
+                assertThat(csvContent.length).isGreaterThan(0);
+
+                try (InputStream csvStream = new ByteArrayInputStream(csvContent);
+                     CSVReader csvReader = new CSVReader(new InputStreamReader(csvStream))) {
+
+                    List<String[]> data = csvReader.readAll();
+                    for (String[] row : data) {
+                        System.out.println("ROW (" + row.length + "): " + Arrays.toString(row));
+                    }
+
+                    assertThat(data).isNotEmpty();
+                    assertEquals(2, data.size());
+                    assertArrayEquals(
+                            new String[] {"email", "name"},
+                            data.get(0)
+                    );
+                    assertArrayEquals(
+                            new String[] {"testemail@gmail.com", "kate"},
+                            data.get(1)
+                    );
                 }
             }
             Assertions.assertTrue(archiveHasFiles, "Archive is empty!");
