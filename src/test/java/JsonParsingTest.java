@@ -7,7 +7,6 @@ import model.ProductsList;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JsonParsingTest {
-
     private ClassLoader cl = ZipParsingTests.class.getClassLoader();
     private final String JSON_FILE = "products_list.json";
     private final Integer PRODUCTS_COUNT = 3;
