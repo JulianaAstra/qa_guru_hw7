@@ -78,7 +78,7 @@ public class ZipParsingTests {
 
     @Test
     @DisplayName("Zip Архив содержит три файла pdf, xlsx, csv")
-    void zipWitThreeFilesParsingTest() throws Exception {
+    void zipWithThreeFilesParsingTest() throws Exception {
         boolean pdfFound = false;
         boolean csvFound = false;
         boolean xlsxFound = false;
