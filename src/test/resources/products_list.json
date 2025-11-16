@@ -1,0 +1,26 @@
+{
+    "shopName": "Roses Store",
+    "products": [
+      {
+        "productId": 1,
+        "productName": "Lady Capri",
+        "productColor": "cream",
+        "productAmount": 5,
+        "productPrice": 450
+      },
+      {
+        "productId": 2,
+        "productName": "Hyde Hall",
+        "productColor": "pink",
+        "productAmount": 3,
+        "productPrice": 480
+      },
+      {
+        "productId": 3,
+        "productName": "Malwern Hills",
+        "productColor": "yellow",
+        "productAmount": 1,
+        "productPrice": 480
+      }
+    ]
+  }

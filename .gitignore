@@ -8,4 +8,6 @@ build/
 *.ipr
 
 .gradle
-*.log
+
+bin/
+.vscode/
